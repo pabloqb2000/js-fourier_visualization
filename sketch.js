@@ -1,11 +1,12 @@
 var N = 1600 // number of input samples
 let path;
 let P;
+let drawings = ['treble-clef']
 
 let done=false;
 async function preload() {
 	//let svg = await fetch("https://gist.githubusercontent.com/mbostock/a4fd7a68925d4039c22996cc1d4862ce/raw/d813a42956d311d73fee336e1b5aac899c835883/fourier.svg")
-	let svg = await fetch("./svg/treble-clef.svg")
+	let svg = await fetch("https://raw.githubusercontent.com/pabloqb2000/js-fourier_visualization/gh-pages/svg/" + drawings[0] + ".svg")
 	.then(response => response.text())
 	.then(text => (new DOMParser).parseFromString(text, "image/svg+xml"))
 	.then(svg => svg.documentElement);
@@ -49,7 +50,11 @@ function draw() {
 	strokeWeight(2);
 	beginShape();
 	for(let p of P) {
-		vertex(p[0], p[1]);
+		vertex(p[0]*20, p[1]*20);
 	}
 	endShape();
+	strokeWeight(5);
+	stroke(255, 0, 0);
+	let i = frameCount % P.length;
+	point(P[i][0]*20, P[i][1]*20);
 }
