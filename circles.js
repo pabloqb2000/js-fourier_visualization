@@ -1,16 +1,25 @@
 class Circle {
     /**
      * Cosntructor of one of the circles
+     * and calculates the initial complex number for this vector
      * 
      * @param f Frecuency at wich this circle is spining
      */
     constructor(f) {
         this.f = f;
-        this.z = new Complex(random(-1,1), random(-1,1)).mult(50);
+        // The initial complex number z is calucalted with the following integral:
+        // Integral (e^(-f2PIit) dt) from 0 to 1
+        let z = new Complex();
+        for(let t = 0; t <= 1; t += dt) {
+            z.add((new Complex(0, -f * 2*PI * t)).exp().mult(pathPt(t)));
+        }
+        z.mult(dt);
+        this.z = z;
     }
 
     update() {
         this.z.mult((new Complex(0, this.f * speedSld.value * 2*PI * deltaTime / 10000)).exp());
+        return this.z;
     }
 
     /**
