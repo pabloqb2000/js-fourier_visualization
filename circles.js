@@ -18,7 +18,7 @@ class Circle {
     }
 
     update() {
-        this.z.mult((new Complex(0, this.f * speedSld.value * 2*PI * deltaTime / 10000)).exp());
+        this.z.mult((new Complex(0, this.f * speedSld.value * PI / 300)).exp());
         return this.z;
     }
 

@@ -1,11 +1,14 @@
 let N = 600; // number of input samples
-let path = null, svg, viewbox, done=false;
+let path = null, svg, viewbox, done=false; // Svg variables
 let drawings = [{name: 'clef', s: 1},
 				{name: 'fourier', s: 1},
 				{name: 'pi', s: 1},
-				{name: 'treble-clef', s: 20}]
-let ind = 2, dt = 1e-2;
-let circlesSld, speedSld, zoomSld, showBtn, followBtn;
+				{name: 'treble-clef', s: 20}]; // Drawing parameters
+let ind = 2; // Index of the last calculated circle
+
+let dt = 0.5e-2; // dt to use in the aproximation of the integral
+
+let circlesSld, speedSld, zoomSld, showBtn, followBtn; // UI
 let circles = [];
 let drawn = [];
 
@@ -16,6 +19,8 @@ async function preload() {
 	.then(svg => svg.documentElement);
 
 	path = svg.querySelector("path");
+
+	restart();
 
 	done=true;
 }
@@ -51,12 +56,12 @@ function draw() {
 	noStroke();
 	fill(200);
 	textAlign(CENTER);
-	text(frameRate().toFixed(2), 0, height/2.5);
-
-	// Zoom
-	scale(zoomSld.value, zoomSld.value);
+	text(frameRate().toFixed(2) + " fps", 0, height/2.5);
 	
-	if(circles.length != 0) {
+	if(circles.length == circlesSld.value) {
+		// Zoom
+		scale(zoomSld.value, zoomSld.value);
+
 		// Update the circles
 		let sum = new Complex();
 		for(let c of circles) {
@@ -92,10 +97,10 @@ function draw() {
 		}
 
 	} else if (done) {
-		text("Loading", 0, 0);
-		restart();
+		addCircle();
+		drawProgressbar();
 	} else {
-		text("Loading", 0, 0);
+		drawProgressbar();
 	}
 }
 
@@ -105,9 +110,20 @@ function draw() {
 function restart() {
 	circles = [];
 	drawn = [];
-	for(let i = 0; i < circlesSld.value; i++) {
-		let f = ceil(i/2)*(-1)**i;
-		circles.push(new Circle(f));
+	ind = 0;
+}
+
+/**
+ * Calculate 1 more circles and add it to the list
+ */
+function addCircle() {
+	let n = 1; // Number of circles to add
+	if(ind < circlesSld.value) {
+		for(let i = 0; i < min(n, circlesSld.value - ind); i++) {
+			let f = ceil(ind/2)*(-1)**ind;
+			circles.push(new Circle(f));
+			ind++;
+		}
 	}
 }
 
@@ -119,4 +135,24 @@ function pathPt(t) {
 	viewbox = svg.viewBox.baseVal;
 	const {x, y} = path.getPointAtLength(t * path.getTotalLength());
 	return new Complex(x - viewbox.width/2, y - viewbox.height/2).mult(height/viewbox.height/1.5);
+}
+
+function drawProgressbar() {
+	let load = ind / circlesSld.value;
+
+	let txt = "...";
+	fill(230);
+	noStroke();
+	text("Loading " + txt.substr(0, floor((millis() % 2000)/500)), 0, 25);
+	text((load * 100).toFixed(0) + " %", 0, -50);
+
+	fill(227, 103, 86);
+	rect(-width/10, -40, width/5*load, 30, 5);
+
+	rectMode(CENTER);
+	noFill();
+	stroke(230);
+	strokeWeight(2);
+	rect(0, -25, width/5, 30, 5);
+	rectMode(CORNER);
 }
