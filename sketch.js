@@ -1,24 +1,27 @@
 let N = 600; // number of input samples
-let path = null, svg, viewbox, done=false; // Svg variables
+let path = [], svg = [], done=false; // Svg variables
 let drawings = [{name: 'clef', s: 1},
 				{name: 'fourier', s: 1},
 				{name: 'pi', s: 1},
 				{name: 'treble-clef', s: 20}]; // Drawing parameters
-let ind = 2; // Index of the last calculated circle
-
+let ind = 0; // Index of the last calculated circle
 let dt = 0.5e-2; // dt to use in the aproximation of the integral
 
 let circlesSld, speedSld, zoomSld, showBtn, followBtn; // UI
-let circles = [];
-let drawn = [];
+let circles = []; // Circles list
+let drawn = []; // list of positions in the path being drawn
 
 async function preload() {
-	svg = await fetch("https://raw.githubusercontent.com/pabloqb2000/js-fourier_visualization/gh-pages/svg/" + drawings[ind].name + ".svg")
-	.then(response => response.text())
-	.then(text => (new DOMParser).parseFromString(text, "image/svg+xml"))
-	.then(svg => svg.documentElement);
+	for(let d of drawings) {		
+		let s = await fetch("https://raw.githubusercontent.com/pabloqb2000/js-fourier_visualization/gh-pages/svg/" + d.name + ".svg")
+		.then(response => response.text())
+		.then(text => (new DOMParser).parseFromString(text, "image/svg+xml"))
+		.then(svg => svg.documentElement);
+		svg.push(s);
 
-	path = svg.querySelector("path");
+		let p = s.querySelector("path");
+		path.push(p);
+	}
 
 	restart();
 
@@ -132,23 +135,24 @@ function addCircle() {
  * at the corresponding length t
  */
 function pathPt(t) {
-	viewbox = svg.viewBox.baseVal;
-	const {x, y} = path.getPointAtLength(t * path.getTotalLength());
+	let n = 3;
+	let viewbox = svg[n].viewBox.baseVal;
+	const {x, y} = path[n].getPointAtLength(t * path[n].getTotalLength());
 	return new Complex(x - viewbox.width/2, y - viewbox.height/2).mult(height/viewbox.height/1.5);
 }
 
 function drawProgressbar() {
 	let load = ind / circlesSld.value;
-
+	// Text
 	let txt = "...";
 	fill(230);
 	noStroke();
 	text("Loading " + txt.substr(0, floor((millis() % 2000)/500)), 0, 25);
 	text((load * 100).toFixed(0) + " %", 0, -50);
-
+	// Inner rectangle
 	fill(227, 103, 86);
 	rect(-width/10, -40, width/5*load, 30, 5);
-
+	// Outside rectangle
 	rectMode(CENTER);
 	noFill();
 	stroke(230);
