@@ -36,7 +36,7 @@ function setup() {
 	// Create UI elements
 	circlesSld = new Slider(1, 200, 13, 0,0, width/12, height/60, 1, "Circles", true, 0, restart)
 	speedSld   = new Slider(0.1, 3, 1, 0,0, width/12, height/60, null, "Speed", false);
-	zoomSld    = new Slider(0.1, 10, 1,0,0, width/12, height/60, null, "Zoom");
+	zoomSld    = new Slider(0.03, 10, 1,0,0, width/12, height/60, null, "Zoom");
 	showBtn = new ToggleButton(0,0, width/12, height/30, "Circles", null, true);
 	followBtn = new ToggleButton(0,0, width/12, height/30, "Follow");
 
