@@ -1,8 +1,8 @@
 let N = 600; // number of input samples
 let path = [], svg = [], done=false; // Svg variables
-let drawings = [{name: 'clef', s: 1},
-				{name: 'fourier', s: 1},
-				{name: 'pi', s: 1},
+let drawings = [{name: 'musical-note'},
+				{name: 'fourier'},
+				{name: 'pi'},
 				{name: 'treble-clef', s: 20}]; // Drawing parameters
 let ind = 0; // Index of the last calculated circle
 let dt = 0.5e-2; // dt to use in the aproximation of the integral
@@ -22,7 +22,6 @@ async function preload() {
 		let p = s.querySelector("path");
 		path.push(p);
 	}
-	console.log(path);
 
 	restart();
 
@@ -121,7 +120,7 @@ function restart() {
  * Calculate 1 more circles and add it to the list
  */
 function addCircle() {
-	let n = 1; // Number of circles to add
+	let n = 2; // Number of circles to add
 	if(ind < circlesSld.value) {
 		for(let i = 0; i < min(n, circlesSld.value - ind); i++) {
 			let f = ceil(ind/2)*(-1)**ind;
@@ -136,10 +135,12 @@ function addCircle() {
  * at the corresponding length t
  */
 function pathPt(t) {
-	let n = 3;
+	let n = 0;
 	let viewbox = svg[n].viewBox.baseVal;
 	const {x, y} = path[n].getPointAtLength(t * path[n].getTotalLength());
-	return new Complex(x - viewbox.width/2, y - viewbox.height/2).mult(height/viewbox.height/1.5);
+	let w = viewbox.width == 0 ? 1400 : viewbox.width;
+	let h = viewbox.height == 0 ? 980 : viewbox.height;
+	return new Complex(x - w/2, y - h/2).mult(height/h/1.5);
 }
 
 function drawProgressbar() {
