@@ -1,13 +1,13 @@
 let N = 600; // number of input samples
 let path = [], svg = [], done=false; // Svg variables
-let drawings = [{name: 'musical-note'},
+let drawings = [{name: 'treble-clef'},
+				{name: 'musical-note'},
 				{name: 'fourier'},
-				{name: 'pi'},
-				{name: 'treble-clef', s: 20}]; // Drawing parameters
+				{name: 'pi'}]; // Drawing parameters
 let ind = 0; // Index of the last calculated circle
 let dt = 0.5e-2; // dt to use in the aproximation of the integral
 
-let circlesSld, speedSld, zoomSld, showBtn, followBtn; // UI
+let circlesSld, speedSld, zoomSld, showBtn, followBtn, optBox; // UI
 let circles = []; // Circles list
 let drawn = []; // list of positions in the path being drawn
 
@@ -34,11 +34,12 @@ function setup() {
 	background(32);
 
 	// Create UI elements
-	circlesSld = new Slider(1, 200, 13, 0,0, width/12, height/60, 1, "Circles", true, 0, restart)
+	circlesSld = new Slider(1, 250, 13, 0,0, width/12, height/60, 1, "Circles", true, 0, restart)
 	speedSld   = new Slider(0.1, 3, 1, 0,0, width/12, height/60, null, "Speed", false);
 	zoomSld    = new Slider(0.03, 10, 1,0,0, width/12, height/60, null, "Zoom");
 	showBtn = new ToggleButton(0,0, width/12, height/30, "Circles", null, true);
 	followBtn = new ToggleButton(0,0, width/12, height/30, "Follow");
+	optBox = new OptionsBox(drawings.map(e => e.name), height/25, restart);
 
 	// Start UI
 	UI.tableWidth = 1;
@@ -54,6 +55,7 @@ function draw() {
 	
 	// Translate to the center
 	translate(13/24*width, height/2);
+	textSize(height/30*0.7);
 	
 	// Draw fps for debugging
 	noStroke();
@@ -135,9 +137,9 @@ function addCircle() {
  * at the corresponding length t
  */
 function pathPt(t) {
-	let n = 0;
+	let n = optBox.selectedIndex();
 	let viewbox = svg[n].viewBox.baseVal;
-	const {x, y} = path[n].getPointAtLength(t * path[n].getTotalLength());
+	const {x, y} = path[n].getPointAtLength(t * path[n].getTotalLength());	
 	let w = viewbox.width == 0 ? 1400 : viewbox.width;
 	let h = viewbox.height == 0 ? 980 : viewbox.height;
 	return new Complex(x - w/2, y - h/2).mult(height/h/1.5);
