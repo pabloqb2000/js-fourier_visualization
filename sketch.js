@@ -22,6 +22,7 @@ async function preload() {
 		let p = s.querySelector("path");
 		path.push(p);
 	}
+	console.log(path);
 
 	restart();
 
