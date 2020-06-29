@@ -8,6 +8,13 @@ Those complex numbers do 0, 1, 2, ... full rotation every ten seconds (clockwise
 This numbers are added and the result of the adition is a point in the final path, as time goes on the path is fully drawn.</br>
 The initial condition of the complex numbers is calcualated with and integral (wich is aproximated numerically).</br>
 For more information on Fourier series visit <a href="https://www.youtube.com/watch?v=r6sGWTCMz2k">3b1b video</a>
+## Options
+ - Circles: number of complex number to use in the aproximation
+ - Speed: speed factor to apply to the rotation of this numbers
+ - Zoom: scale factor to apply to the whole drawing
+ - Circles: whether to draw the rotating circles
+ - Follow: whether the camera should follow the last point drawn in the path
+ - SVG: name of the drawing to approximate
 ## Screenshot
 <img src="imgs/screenshot01.png"></img>
 ## References
