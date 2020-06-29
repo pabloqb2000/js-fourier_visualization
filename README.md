@@ -21,7 +21,7 @@ For more information on Fourier series visit <a href="https://www.youtube.com/wa
 To find more information about the <b>awesome</b> library used for this proyect visit:
 <a href="https://p5js.org/"> https://p5js.org/ </a></br>
 For more information on Fourier series visit <a href="https://www.youtube.com/watch?v=r6sGWTCMz2k">3b1b video</a></br>
-Links to the author of the svg files:</br>
+Links to the authors of the svg files:</br>
  - Pi: Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></br>
  - Double quaver: Icon made by <a href="https://www.flaticon.com/authors/becris" title="Becris">Becris</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></br>
 ## Other proyects
